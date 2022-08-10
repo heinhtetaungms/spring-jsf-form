@@ -1,0 +1,97 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+	<style>
+.ui-inputgroup {
+	width: 25%;
+	margin-bottom: 20px;
+	display: flex;
+	text-align: center;
+}
+
+.ui-datatable .ui-datatable-header {
+	display: flex;
+	justify-content: end;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	display: flex;
+	justify-content: end;
+}
+</style>
+</h:head>
+<body>
+	<h:form>
+		<div class="card">
+			<p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank ui-fluid"
+				style="border:0px none; background-color:transparent;">
+				<p:outputLabel for="@next" value="Name" />
+				<p:inputText id="name" value="#{addNewUserActionBean.user.name}" placeholder="Enter Username" required="true" />
+				<p:outputLabel for="@next" value="Phone" />
+				<p:inputText value="#{addNewUserActionBean.user.phone}" placeholder="Enter Phone" required="true" />
+				<p:row>
+					<p:outputLabel for="@next" value="Email" />
+					<p:inputText value="#{addNewUserActionBean.user.email}" placeholder="Enter Email" />
+				</p:row>
+				<p:outputLabel for="@next" value="Address" />
+				<p:inputTextarea value="#{addNewUserActionBean.user.address}" placeholder="Enter Address" rows="5" />
+				<p:row>
+					<p:commandButton value="Submit" styleClass="ui-button-raised" action="#{addNewUserActionBean.addUser()}" rendered="#{addNewUserActionBean.new}" />
+					<p:commandButton value="Update" styleClass="ui-button-raised" action="#{addNewUserActionBean.updateUser()}" rendered="#{!addNewUserActionBean.new}" />
+				
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</h:form>
+	<h:form>
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:dataTable value="#{manageUserActionBean.users}" var="u" paginator="true" paginatorPosition="bottom" rows="2" stripedRows="true" widgetVar="userWidget"
+					rendered="#{not empty manageUserActionBean.users}">
+					<f:facet name="header">
+						<h:panelGroup>
+							<p:outputPanel style="padding-bottom: 4px;">
+								<p:inputText id="globalFilter" onchange="PF('userWidget').filter();" style="width:50%;" placeholder="Global Filter" />
+								<p:commandButton id="Search" value="Search" process="@this" update="@this" style="font-size: 1em;" />
+							</p:outputPanel>
+						</h:panelGroup>
+					</f:facet>
+					<p:column filterBy="#{u.id}">
+						<f:facet name="header">
+				ID</f:facet>
+			#{u.id}
+		</p:column>
+					<p:column filterBy="#{u.name}">
+						<f:facet name="header">Name</f:facet>
+			#{u.name}
+		</p:column>
+					<p:column filterBy="#{u.phone}">
+						<f:facet name="header">Phone</f:facet>
+			#{u.phone}
+		</p:column>
+					<p:column filterBy="#{u.email}">
+						<f:facet name="header">Email</f:facet>
+			#{u.email}
+		</p:column>
+					<p:column filterBy="#{u.address}">
+						<f:facet name="header">Address</f:facet>
+			#{u.address}
+		</p:column>
+					<p:column>
+						<f:facet name="header">Edit</f:facet>
+						<p:commandButton action="#{manageUserActionBean.editUser()}" value="Edit">
+							<f:param name="selectedUserId" value="#{u.id}"></f:param>
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Delete</f:facet>
+						<p:commandButton action="#{manageUserActionBean.deleteUser(u)}" value="Delete"></p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+</body>
+</html>
